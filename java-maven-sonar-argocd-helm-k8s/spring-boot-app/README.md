@@ -65,3 +65,32 @@ cd sonarqube-9.4.0.54424/bin/linux-x86-64/
 Hurray !! Now you can access the `SonarQube Server` on `http://<ip-address>:9000` 
 
 
+Code that worked for me to run sonarcube
+The problem with your commands is that they're creating the SonarQube directory structure under the /home/sonarqube directory, which doesn't exist on your Ubuntu system by default. Ubuntu uses /home/<username> for user directories, where <username> is the name of the user who logged in. In your case, it's ubuntu.
+
+Here's the corrected version of your commands:
+
+Bash
+
+sudo apt install unzip  # Install unzip utility
+
+# Create a new user for SonarQube (recommended for security)
+sudo adduser sonarqube
+
+# Download SonarQube
+sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.4.0.54424.zip
+
+# Extract the archive to the user's home directory
+sudo unzip sonarqube-9.4.0.54424.zip -d /home/sonarqube
+
+# Set permissions (assuming you want to keep it in the home directory)
+sudo chmod -R 755 /home/sonarqube/sonarqube-9.4.0.54424
+sudo chown -R sonarqube:sonarqube /home/sonarqube/sonarqube-9.4.0.54424
+
+# Switch to the SonarQube user (recommended)
+sudo su - sonarqube
+
+# Start SonarQube
+cd /home/sonarqube/sonarqube-9.4.0.54424/bin/linux-x86-64/
+./sonar.sh start
+
